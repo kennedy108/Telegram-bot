@@ -1,5 +1,11 @@
 import sqlite3
 
+# DATABASE MODULE
+# Handles all database operations for storing
+# and retrieving Telegram users
+
+# Initilaizes a database and creates the user table
+# if it does not exists
 def init_db():
     connect = sqlite3.connect("users.db")
     cur = connect.cursor()
@@ -10,6 +16,10 @@ def init_db():
     connect.commit()
     connect.close()
 
+# Saves the user to the data base
+
+# @param chat_id the id of the users telegram
+# @param username the telegram username
 def save_user(chat_id, username):
     connect = sqlite3.connect("users.db")
     cur = connect.cursor()
@@ -18,6 +28,11 @@ def save_user(chat_id, username):
     connect.commit()
     connect.close()
 
+
+# Gets the chat id of the user based off of there username
+
+# @param username the telegram username
+# @return the chat id of the user if found, otherwise return none
 def get_user(username):
     connect = sqlite3.connect("users.db")
     cur = connect.cursor()

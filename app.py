@@ -6,12 +6,17 @@ from telegram_bot import TelegramBot
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 
+# FLASK API MODULE
+# Main entry point for the Flask application
+# Handles webhook and notification routes
+
 load_dotenv()
 app = Flask(__name__)
 bot = TelegramBot(os.environ.get("TELEGRAM_BOT_TOKEN"))
 init_db()
 limiter = Limiter(app=app, key_func=get_remote_address, default_limits=["200 per day", "50 per hour"])
 
+# Recives the message from telegram and registers user when /start is entered
 @app.route("/webhook", methods = ["POST"])
 def webhook():
     expected_secret = os.environ.get("WEBHOOK_SECRET")
@@ -36,6 +41,9 @@ def webhook():
     except Exception as e:
         return jsonify({"error": "Something went wrong"}), 500
 
+# Sends the notification to the user
+
+#@param username the telegram username
 @app.route("/notify/<username>", methods=["POST"])
 @limiter.limit("5 per minute")
 def notify_user(username):
